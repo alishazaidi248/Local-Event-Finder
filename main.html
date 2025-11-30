@@ -1,0 +1,32 @@
+<html ng-app="eventApp">
+<head>
+  <title>Local Event Finder</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="app.js"></script>
+</head>
+<body ng-controller="EventController">
+
+  <h1>Local Event Finder</h1>
+
+  <label>Select Event Type:</label>
+  <select ng-model="selectedCategory">
+    <option value="">All</option>
+    <option ng-repeat="cat in categories" value="{{cat}}">{{cat}}</option>
+  </select>
+
+  <hr>
+  <h2>Available Events</h2>
+  <ul>
+    <li ng-repeat="event in events | filter:{category:selectedCategory}">
+      <strong>{{ event.name }}</strong>-{{ event.category }}<br>
+         {{ event.date }} |  {{ event.location }}
+      <br>
+      <button ng-click="register(event)">Register</button>
+      <hr>
+    </li>
+  </ul>
+
+  <p ng-if="message">{{ message }}</p>
+
+</body>
+</html>
