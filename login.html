@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login System</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #ececec;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .box {
+        width: 350px;
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 15px;
+        padding: 12px;
+        background: #4CAF50;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #46a049;
+    }
+
+    .link {
+        text-align: center;
+        margin-top: 10px;
+        cursor: pointer;
+        color: blue;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .message {
+        text-align: center;
+        margin-top: 10px;
+        color: red;
+        font-size: 14px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <!-- LOGIN PAGE -->
+    <div id="loginPage">
+        <h2>Login</h2>
+        <input id="loginEmail" type="email" placeholder="Email">
+        <input id="loginPass" type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <div class="link" onclick="showPage('signupPage')">Create an Account</div>
+        <div class="link" onclick="showPage('forgotPage')">Forgot Password?</div>
+        <div id="loginMsg" class="message"></div>
+    </div>
+
+    <!-- SIGNUP PAGE -->
+    <div id="signupPage" class="hidden">
+        <h2>Sign Up</h2>
+        <input id="signupEmail" type="email" placeholder="Email">
+        <input id="signupPass" type="password" placeholder="Password">
+        <button onclick="signup()">Sign Up</button>
+        <div class="link" onclick="showPage('loginPage')">Already have an account?</div>
+        <div id="signupMsg" class="message"></div>
+    </div>
+
+    <!-- FORGOT PASSWORD PAGE -->
+    <div id="forgotPage" class="hidden">
+        <h2>Forgot Password</h2>
+        <input id="forgotEmail" type="email" placeholder="Email">
+        <button onclick="resetPassword()">Send Reset Link</button>
+        <div class="link" onclick="showPage('loginPage')">Back to Login</div>
+        <div id="forgotMsg" class="message"></div>
+    </div>
+
+</div>
+
+<script>
+    // -------------------------
+    // FIREBASE CONFIG
+    // -------------------------
+    const firebaseConfig = {
+        apiKey: "AIzaSyAX5Hww_2M8LzXheMkY4tuVqmBLf1zHHm8",
+        authDomain: "auththingyyyyyyyyyy.firebaseapp.com",
+        projectId: "auththingyyyyyyyyyy",
+        storageBucket: "auththingyyyyyyyyyy.firebasestorage.app",
+        messagingSenderId: "88018644426",
+        appId: "1:88018644426:web:8fbae4fdd3f521b2fe3333"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Switch Pages
+    function showPage(page) {
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("signupPage").classList.add("hidden");
+        document.getElementById("forgotPage").classList.add("hidden");
+
+        document.getElementById(page).classList.remove("hidden");
+    }
+
+    // LOGIN
+    function login() {
+        let email = document.getElementById("loginEmail").value;
+        let pass = document.getElementById("loginPass").value;
+
+        auth.signInWithEmailAndPassword(email, pass)
+        .then(() => {
+            window.location.href = "main.html"; // redirect
+        })
+        .catch(err => {
+            document.getElementById("loginMsg").innerHTML = err.message;
+        });
+    }
+
+    // SIGNUP
+    function signup() {
+        let email = document.getElementById("signupEmail").value;
+        let pass = document.getElementById("signupPass").value;
+
+        auth.createUserWithEmailAndPassword(email, pass)
+        .then(() => {
+            document.getElementById("signupMsg").style.color = "green";
+            document.getElementById("signupMsg").innerHTML = "Account Created! You can login now.";
+        })
+        .catch(err => {
+            document.getElementById("signupMsg").innerHTML = err.message;
+        });
+    }
+
+    // PASSWORD RESET
+    function resetPassword() {
+        let email = document.getElementById("forgotEmail").value;
+
+        auth.sendPasswordResetEmail(email)
+        .then(() => {
+            document.getElementById("forgotMsg").style.color = "green";
+            document.getElementById("forgotMsg").innerHTML = "Reset link sent! Check your email.";
+        })
+        .catch(err => {
+            document.getElementById("forgotMsg").innerHTML = err.message;
+        });
+    }
+</script>
+
+</body>
+</html>
