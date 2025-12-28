@@ -1,192 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login System</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login</title>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #ececec;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
 
-    .box {
-        width: 350px;
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        animation: fadeIn 0.4s ease-in-out;
-    }
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
-    }
+/* VIDEO BACKGROUND */
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+}
 
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
+/* DARK OVERLAY */
+/* Add this to your existing CSS or replace the body styles */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center; /* horizontal centering */
+    align-items: center;     /* vertical centering */
+    overflow: hidden;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
 
-    input {
-        width: 100%;
-        padding: 12px;
-        margin-top: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
+/* LOGIN CARD */
+.card {
+    position: relative;
+    z-index: 1;
+    width: 420px;
+    padding: 35px 30px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.264);
+    backdrop-filter: blur(25px);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    color: white;
+    animation: fadeUp 0.6s ease;
+}
 
-    button {
-        width: 100%;
-        margin-top: 15px;
-        padding: 12px;
-        background: #4CAF50;
-        border: none;
-        color: white;
-        font-size: 16px;
-        border-radius: 6px;
-        cursor: pointer;
-    }
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-    button:hover {
-        background: #46a049;
-    }
+h1 {
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 28px;
+}
 
-    .link {
-        text-align: center;
-        margin-top: 10px;
-        cursor: pointer;
-        color: blue;
-    }
+.subtitle {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 25px;
+}
 
-    .hidden {
-        display: none;
-    }
+label {
+    font-size: 13px;
+    opacity: 0.85;
+}
 
-    .message {
-        text-align: center;
-        margin-top: 10px;
-        color: red;
-        font-size: 14px;
+input {
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 14px;
+}
+
+input::placeholder {
+    color: rgba(255,255,255,0.6);
+}
+
+.forgot {
+    text-align: right;
+    font-size: 13px;
+    margin-top: -8px;
+    margin-bottom: 18px;
+    cursor: pointer;
+    color: #ff9ad5;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #a855f7, #ec4899);
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+button:hover {
+    transform: scale(1.02);
+    opacity: 0.95;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+}
+
+.social {
+    display: flex;
+    gap: 12px;
+}
+
+.social button {
+    flex: 1;
+    background: rgba(255,255,255,0.15);
+}
+
+.switch {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 18px;
+}
+
+.switch span {
+    color: #ff9ad5;
+    cursor: pointer;
+}
+
+.message {
+    text-align: center;
+    font-size: 13px;
+    margin-top: 10px;
+    color: #ffb4b4;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 90%;
     }
+}
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<!-- VIDEO BACKGROUND -->
+<video autoplay muted loop id="bg-video" playsinline>
+    <source src="your-video.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+</video>
 
-    <!-- LOGIN PAGE -->
+<div class="card">
+
+    <!-- LOGIN -->
     <div id="loginPage">
-        <h2>Login</h2>
-        <input id="loginEmail" type="email" placeholder="Email">
-        <input id="loginPass" type="password" placeholder="Password">
-        <button onclick="login()">Login</button>
-        <div class="link" onclick="showPage('signupPage')">Create an Account</div>
-        <div class="link" onclick="showPage('forgotPage')">Forgot Password?</div>
+        <h1>Welcome Back</h1>
+        <div class="subtitle">Sign in to continue your journey</div>
+
+        <label>Email</label>
+        <input id="loginEmail" type="email" placeholder="Enter your email">
+
+        <label>Password</label>
+        <input id="loginPass" type="password" placeholder="Enter your password">
+
+        <div class="forgot" onclick="showPage('forgotPage')">Forgot password?</div>
+
+        <button onclick="login()">Sign In</button>
+
+        <div class="divider">or continue with</div>
+
+        <div class="social">
+            <button>G</button>
+            <button>GitHub</button>
+            <button>Discord</button>
+        </div>
+
+        <div class="switch">
+            Don’t have an account? <span onclick="showPage('signupPage')">Sign up</span>
+        </div>
+
         <div id="loginMsg" class="message"></div>
     </div>
 
-    <!-- SIGNUP PAGE -->
+    <!-- SIGNUP -->
     <div id="signupPage" class="hidden">
-        <h2>Sign Up</h2>
-        <input id="signupEmail" type="email" placeholder="Email">
-        <input id="signupPass" type="password" placeholder="Password">
+        <h1>Create Account</h1>
+        <div class="subtitle">Join our community</div>
+
+        <label>Email</label>
+        <input id="signupEmail" type="email" placeholder="Enter your email">
+
+        <label>Password</label>
+        <input id="signupPass" type="password" placeholder="Create a password">
+
         <button onclick="signup()">Sign Up</button>
-        <div class="link" onclick="showPage('loginPage')">Already have an account?</div>
+
+        <div class="switch">
+            Already have an account? <span onclick="showPage('loginPage')">Sign in</span>
+        </div>
+
         <div id="signupMsg" class="message"></div>
     </div>
 
-    <!-- FORGOT PASSWORD PAGE -->
+    <!-- FORGOT -->
     <div id="forgotPage" class="hidden">
-        <h2>Forgot Password</h2>
-        <input id="forgotEmail" type="email" placeholder="Email">
+        <h1>Reset Password</h1>
+        <div class="subtitle">We’ll send you a reset link</div>
+
+        <label>Email</label>
+        <input id="forgotEmail" type="email" placeholder="Enter your email">
+
         <button onclick="resetPassword()">Send Reset Link</button>
-        <div class="link" onclick="showPage('loginPage')">Back to Login</div>
+
+        <div class="switch">
+            <span onclick="showPage('loginPage')">Back to login</span>
+        </div>
+
         <div id="forgotMsg" class="message"></div>
     </div>
 
 </div>
 
 <script>
-    // -------------------------
-    // FIREBASE CONFIG
-    // -------------------------
-    const firebaseConfig = {
-        apiKey: "AIzaSyAX5Hww_2M8LzXheMkY4tuVqmBLf1zHHm8",
-        authDomain: "auththingyyyyyyyyyy.firebaseapp.com",
-        projectId: "auththingyyyyyyyyyy",
-        storageBucket: "auththingyyyyyyyyyy.firebasestorage.app",
-        messagingSenderId: "88018644426",
-        appId: "1:88018644426:web:8fbae4fdd3f521b2fe3333"
-    };
+const firebaseConfig = {
+    apiKey: "AIzaSyAX5Hww_2M8LzXheMkY4tuVqmBLf1zHHm8",
+    authDomain: "auththingyyyyyyyyyy.firebaseapp.com",
+    projectId: "auththingyyyyyyyyyy",
+    storageBucket: "auththingyyyyyyyyyy.firebasestorage.app",
+    messagingSenderId: "88018644426",
+    appId: "1:88018644426:web:8fbae4fdd3f521b2fe3333"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-    // Switch Pages
-    function showPage(page) {
-        document.getElementById("loginPage").classList.add("hidden");
-        document.getElementById("signupPage").classList.add("hidden");
-        document.getElementById("forgotPage").classList.add("hidden");
+function showPage(page) {
+    ["loginPage","signupPage","forgotPage"].forEach(p =>
+        document.getElementById(p).classList.add("hidden")
+    );
+    document.getElementById(page).classList.remove("hidden");
+}
 
-        document.getElementById(page).classList.remove("hidden");
-    }
+function login() {
+    auth.signInWithEmailAndPassword(loginEmail.value, loginPass.value)
+    .then(() => window.location.href = "main.html")
+    .catch(e => loginMsg.innerText = e.message);
+}
 
-    // LOGIN
-    function login() {
-        let email = document.getElementById("loginEmail").value;
-        let pass = document.getElementById("loginPass").value;
+function signup() {
+    auth.createUserWithEmailAndPassword(signupEmail.value, signupPass.value)
+    .then(() => {
+        signupMsg.style.color = "green";
+        signupMsg.innerText = "Account created! You can sign in.";
+    })
+    .catch(e => signupMsg.innerText = e.message);
+}
 
-        auth.signInWithEmailAndPassword(email, pass)
-        .then(() => {
-            window.location.href = "main.html"; // redirect
-        })
-        .catch(err => {
-            document.getElementById("loginMsg").innerHTML = err.message;
-        });
-    }
-
-    // SIGNUP
-    function signup() {
-        let email = document.getElementById("signupEmail").value;
-        let pass = document.getElementById("signupPass").value;
-
-        auth.createUserWithEmailAndPassword(email, pass)
-        .then(() => {
-            document.getElementById("signupMsg").style.color = "green";
-            document.getElementById("signupMsg").innerHTML = "Account Created! You can login now.";
-        })
-        .catch(err => {
-            document.getElementById("signupMsg").innerHTML = err.message;
-        });
-    }
-
-    // PASSWORD RESET
-    function resetPassword() {
-        let email = document.getElementById("forgotEmail").value;
-
-        auth.sendPasswordResetEmail(email)
-        .then(() => {
-            document.getElementById("forgotMsg").style.color = "green";
-            document.getElementById("forgotMsg").innerHTML = "Reset link sent! Check your email.";
-        })
-        .catch(err => {
-            document.getElementById("forgotMsg").innerHTML = err.message;
-        });
-    }
+function resetPassword() {
+    auth.sendPasswordResetEmail(forgotEmail.value)
+    .then(() => {
+        forgotMsg.style.color = "green";
+        forgotMsg.innerText = "Reset link sent!";
+    })
+    .catch(e => forgotMsg.innerText = e.message);
+}
 </script>
 
 </body>

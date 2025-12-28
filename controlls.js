@@ -28,7 +28,17 @@ app.controller('EventController', function ($scope, $timeout) {
 
   /* ================= NAVIGATION ================= */
   $scope.activePage = "dashboard";
-  $scope.setPage = page => $scope.activePage = page;
+$scope.setPage = function (page) {
+  $scope.activePage = page;
+  $scope.showSidebar = false; // ✅ auto close sidebar
+};
+  /* ================= SIDEBAR TOGGLE ================= */
+$scope.showSidebar = false;
+
+$scope.toggleSidebar = function () {
+  $scope.showSidebar = !$scope.showSidebar;
+};
+
 
   /* ================= SETTINGS ================= */
   $scope.showSettings = false;
@@ -47,12 +57,179 @@ app.controller('EventController', function ($scope, $timeout) {
 
   /* ================= EVENTS ================= */
   $scope.categories = ['Concert', 'Food Festival', 'Lecture', 'Sports'];
+$scope.events = [
+  {
+    id: '1',
+    name: 'Rock Night',
+    category: 'Concert',
+    date: 'Jan 10',
+    time: '7:00 PM – 11:00 PM',
+    location: 'Mumbai',
+    ageLimit: '18+',
+    price: '$50',
+    description: 'A live concert featuring top artists with immersive sound.',
+    images: [
+      'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
+      'https://images.unsplash.com/photo-1497032205916-ac775f0649ae'
+    ],
+    currentImage: 0
+  },
+  {
+    id: '2',
+    name: 'Taco Fiesta',
+    category: 'Food Festival',
+    date: 'Jan 12',
+    time: '12:00 PM – 9:00 PM',
+    location: 'Navi Mumbai',
+    ageLimit: 'All Ages',
+    price: '$20',
+    description: 'A celebration of food with multiple cuisines and vendors.',
+    images: [
+      'https://images.unsplash.com/photo-1600891964599-f61ba0e24092',
+      'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe'
+    ],
+    currentImage: 0
+  },
+  {
+    id: '3',
+    name: 'Tech Talk 2025',
+    category: 'Lecture',
+    date: 'Jan 15',
+    time: '2:00 PM – 5:00 PM',
+    location: 'Bangalore',
+    ageLimit: '15+',
+    price: 'Free',
+    description: 'An informative session on upcoming tech trends.',
+    images: [
+      'https://images.unsplash.com/photo-1581091870622-37e0bbd07db4',
+      'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620'
+    ],
+    currentImage: 0
+  },
+  {
+    id: '4',
+    name: 'Jazz Evening',
+    category: 'Concert',
+    date: 'Jan 18',
+    time: '6:00 PM – 10:00 PM',
+    location: 'Pune',
+    ageLimit: '18+',
+    price: '$40',
+    description: 'Smooth jazz night with renowned artists.',
+    images: [
+      'https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2',
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819'
+    ],
+    currentImage: 0
+  },
+  {
+    id: '5',
+    name: 'Burger Bonanza',
+    category: 'Food Festival',
+    date: 'Jan 20',
+    time: '11:00 AM – 8:00 PM',
+    location: 'Delhi',
+    ageLimit: 'All Ages',
+    price: '$15',
+    description: 'All-you-can-eat burger festival.',
+    images: [
+      'https://images.unsplash.com/photo-1555939594-58d7cb561ad1',
+      'https://images.unsplash.com/photo-1528605248644-14dd04022da1'
+    ],
+    currentImage: 0
+  },
+  {
+    id: '6',
+    name: 'AI Workshop',
+    category: 'Lecture',
+    date: 'Jan 22',
+    time: '10:00 AM – 3:00 PM',
+    location: 'Bangalore',
+    ageLimit: '16+',
+    price: '$30',
+    description: 'Hands-on workshop on AI and machine learning.',
+    images: [
+      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97',
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee'
+    ],
+    currentImage: 0
+  },
+  {
+    id: '7',
+    name: 'Hip-Hop Night',
+    category: 'Concert',
+    date: 'Jan 25',
+    time: '8:00 PM – 12:00 AM',
+    location: 'Chennai',
+    ageLimit: '18+',
+    price: '$60',
+    description: 'Live hip-hop performances with special guests.',
+    images: [
+      'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4',
+      'https://images.unsplash.com/photo-1497032205916-ac775f0649ae'
+    ],
+    currentImage: 0
+  },
+  {
+    id: '8',
+    name: 'Pizza Fiesta',
+    category: 'Food Festival',
+    date: 'Jan 28',
+    time: '12:00 PM – 9:00 PM',
+    location: 'Kolkata',
+    ageLimit: 'All Ages',
+    price: '$25',
+    description: 'Pizza lovers unite! Multiple varieties and vendors.',
+    images: [
+      'https://images.unsplash.com/photo-1600891964599-f61ba0e24092',
+      'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe'
+    ],
+    currentImage: 0
+  },
+  {
+    id: '9',
+    name: 'Science Seminar',
+    category: 'Lecture',
+    date: 'Jan 30',
+    time: '1:00 PM – 4:00 PM',
+    location: 'Hyderabad',
+    ageLimit: '15+',
+    price: 'Free',
+    description: 'Seminar on recent advancements in science and research.',
+    images: [
+      'https://images.unsplash.com/photo-1581091870622-37e0bbd07db4',
+      'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620'
+    ],
+    currentImage: 0
+  }
+];
 
-  $scope.events = [
-    { id: '1', name: 'Rock Night', category: 'Concert', date: 'Jan 10', location: 'Mumbai' },
-    { id: '2', name: 'Taco Fiesta', category: 'Food Festival', date: 'Jan 12', location: 'Navi Mumbai' },
-    { id: '3', name: 'Tech Talk', category: 'Lecture', date: 'Jan 15', location: 'Mumbai' }
-  ];
+  $scope.nextImage = function (event) {
+    event.currentImage = (event.currentImage + 1) % event.images.length;
+  };
+
+  $scope.prevImage = function (event) {
+    event.currentImage =
+      (event.currentImage - 1 + event.images.length) % event.images.length;
+  };
+
+  /* ================= EVENT DETAILS (✅ ONLY ADDITION) ================= */
+  $scope.selectedEvent = null;
+
+  $scope.viewEvent = function (event) {
+    $scope.selectedEvent = {
+      ...event,
+      time: "6:00 PM – 10:00 PM",
+      ageLimit: "18+",
+      description:
+        event.category === "Concert"
+          ? "A live concert featuring top artists and immersive sound."
+          : event.category === "Food Festival"
+          ? "A celebration of food with multiple cuisines and vendors."
+          : "An informative and engaging event."
+    };
+    $scope.setPage('eventDetails');
+  };
 
   /* ================= REGISTRATIONS ================= */
   $scope.myEvents = [];
@@ -87,7 +264,6 @@ app.controller('EventController', function ($scope, $timeout) {
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
 
-      // 🔔 SAVE NOTIFICATION
       db.collection("notifications").add({
         userId: userId,
         text: "You registered for " + event.name,
@@ -97,12 +273,10 @@ app.controller('EventController', function ($scope, $timeout) {
 
       $scope.message = "🎉 Registered for " + event.name;
       $scope.$applyAsync();
-    }).catch(err => {
-      alert(err.message);
     });
   };
 
-  /* ================= AUTH STATE ================= */
+  /* ================= AUTH ================= */
   auth.onAuthStateChanged(user => {
     if (!user) {
       window.location.href = "login.html";
@@ -120,15 +294,6 @@ app.controller('EventController', function ($scope, $timeout) {
 
     loadRegistrations();
 
-    // Load profile photo from Firestore
-    db.collection("users").doc(userId).get().then(doc => {
-      if (doc.exists) {
-        $scope.user.photoURL = doc.data().photoURL || $scope.user.photoURL;
-        $scope.$applyAsync();
-      }
-    });
-
-    // Load notifications
     db.collection("notifications")
       .where("userId", "==", userId)
       .orderBy("timestamp", "desc")
@@ -139,50 +304,5 @@ app.controller('EventController', function ($scope, $timeout) {
 
     $scope.$applyAsync();
   });
-
-  /* ================= ACCOUNT ACTIONS ================= */
-  $scope.uploadPhoto = function(files) {
-  if (!files.length || !$scope.user) return;
-
-  const file = files[0];
-  const ref = storage.ref(`profiles/${$scope.user.uid}.jpg`);
-
-  ref.put(file)
-    .then(snap => snap.ref.getDownloadURL())
-    .then(url => {
-
-      // ✅ Update Firebase Auth profile
-      return auth.currentUser.updateProfile({
-        photoURL: url
-      }).then(() => url);
-    })
-    .then(url => {
-
-      // ✅ Save to Firestore (optional but good)
-      return db.collection("users").doc($scope.user.uid).set({
-        photoURL: url,
-        email: $scope.user.email,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true }).then(() => url);
-    })
-    .then(url => {
-      // ✅ Update Angular scope
-      $scope.user.photoURL = url;
-      $scope.$applyAsync();
-    })
-    .catch(err => alert(err.message));
-};
-
-  $scope.logout = function () {
-    auth.signOut().then(() => {
-      window.location.href = "login.html";
-    });
-  };
-
-  $scope.resetPassword = function () {
-    auth.sendPasswordResetEmail($scope.user.email)
-      .then(() => alert("Password reset email sent"))
-      .catch(err => alert(err.message));
-  };
 
 });
