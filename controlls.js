@@ -24,7 +24,7 @@ app.controller('EventController', function ($scope, $timeout) {
 
   /* ================= SPLASH ================= */
   $scope.showSplash = true;
-  $timeout(() => $scope.showSplash = false, 1500);
+  $timeout(() => $scope.showSplash = false, 3500);
 
   /* ================= NAVIGATION ================= */
   $scope.activePage = "dashboard";
@@ -101,8 +101,9 @@ $scope.events = [
     price: 'Free',
     description: 'An informative session on upcoming tech trends.',
     images: [
-      'https://images.unsplash.com/photo-1581091870622-37e0bbd07db4',
-      'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620'
+      'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620',
+          'https://images.unsplash.com/photo-1519681393784-d120267933ba', // starry sky
+
     ],
     currentImage: 0
   },
@@ -197,12 +198,63 @@ $scope.events = [
     price: 'Free',
     description: 'Seminar on recent advancements in science and research.',
     images: [
-      'https://images.unsplash.com/photo-1581091870622-37e0bbd07db4',
+    'https://images.unsplash.com/photo-1462331940025-496dfbfc7564', // stars
       'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620'
     ],
     currentImage: 0
   }
 ];
+/* ================= LOAD EVENT IMAGES FROM FIREBASE ================= */
+function loadEventImages() {
+  $scope.events.forEach(event => {
+    const folderRef = storage.ref("eventImages/" + event.id);
+
+    folderRef.listAll()
+      .then(res => {
+        const promises = res.items.map(item => item.getDownloadURL());
+        return Promise.all(promises);
+      })
+      .then(urls => {
+        $scope.$apply(() => {
+          event.images = urls;
+        });
+      })
+      .catch(err => {
+        console.error("Error loading images for event", event.id, err);
+      });
+  });
+}
+
+/* ================= PROFILE PHOTO UPLOAD ================= */
+$scope.uploadPhoto = function (files) {
+  if (!files || !files.length || !userId) return;
+
+  const file = files[0];
+
+  // Optional safety check
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image file");
+    return;
+  }
+
+  const ref = storage.ref("profilePhotos/" + userId);
+
+  ref.put(file).then(snapshot => {
+    return snapshot.ref.getDownloadURL();
+  }).then(url => {
+    return auth.currentUser.updateProfile({
+      photoURL: url
+    }).then(() => {
+     $scope.$apply(() => {
+  $scope.user.photoURL = url;
+});
+
+    });
+  }).catch(err => {
+    console.error("Photo upload error:", err);
+  });
+};
+
 
   $scope.nextImage = function (event) {
     event.currentImage = (event.currentImage + 1) % event.images.length;

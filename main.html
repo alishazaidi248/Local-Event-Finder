@@ -53,27 +53,116 @@
     }
 
     body {
-      margin: 0;
-      background: var(--bg);
-      font-family: 'Poppins', sans-serif;
-      color: var(--text);
-      display: flex;
-      transition: 0.3s;
-    }
+  margin: 0;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(186, 85, 211, 0.35), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(72, 118, 255, 0.35), transparent 55%),
+    radial-gradient(circle at 90% 20%, rgba(64, 224, 208, 0.35), transparent 50%),
+    linear-gradient(135deg, #7b3fe4, #4b7bec, #2ed6c4);
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  display: flex;
+  transition: background 0.4s ease, color 0.3s;
+  min-height: 100vh;
+}
+/* ================= GLASS TRANSPARENCY ONLY ================= */
+/* No padding, no margin, no width, no height touched */
 
-    /* SPLASH */
-    #splash {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg,#2196F3,#4CAF50);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      z-index: 9999;
-    }
-    #splash img { width: 140px; }
+.filter-box,
+.event-card,
+.settings-panel,
+.sidebar,
+.bms-sidebar,
+.top-navbar,
+.secondary-nav {
+  background: rgba(255, 255, 255, 0.28) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Inputs & search bar only background */
+.search-box input,
+.search-bar input,
+select {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Sidebar hover remains same size */
+.bms-item:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+/* Dark mode compatibility */
+body.dark-theme .filter-box,
+body.dark-theme .event-card,
+body.dark-theme .settings-panel,
+body.dark-theme .sidebar,
+body.dark-theme .bms-sidebar,
+body.dark-theme .top-navbar,
+body.dark-theme .secondary-nav {
+  background: rgba(30, 30, 30, 0.45) !important;
+}
+
+/* UI POLISH – CARD DEPTH */
+.filter-box,
+.event-card,
+.settings-panel,
+.sidebar,
+.top-navbar,
+.secondary-nav {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  backdrop-filter: blur(6px);
+}
+
+/* Event hover polish */
+.event-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.15);
+}
+.top-navbar,
+.secondary-nav,
+.sidebar,
+.right-sidebar {
+  backdrop-filter: blur(8px);
+}
+
+
+    /* Splash video background */
+#splash {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#splashVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+#splash .splash-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+#splash img {
+  width: 140px;
+  margin-bottom: 20px;
+}
 
     /* SIDEBAR */
     .sidebar {
@@ -370,10 +459,58 @@
   margin-left: 18px;
 }
 
+
+/* Sidebar overlay for closing */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  z-index: 998;
+}
+/* FIX: Smooth & natural sidebar scrolling */
+.bms-sidebar {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Ensure overlay does NOT block sidebar scroll */
+.sidebar-overlay {
+  pointer-events: auto;
+}
+
+.bms-sidebar {
+  pointer-events: auto;
+}
+/* 🔧 CRITICAL FIX: sidebar must be above overlay */
+.bms-sidebar {
+  position: fixed;        /* already visually behaving as fixed */
+  top: 0;
+  right: 0;
+  z-index: 999;           /* higher than overlay */
+  overflow-y: auto;       /* keep scroll */
+}
+
+/* overlay stays below sidebar */
+.sidebar-overlay {
+  z-index: 998;
+}
+
+
   </style>
 </head>
 
+
 <body ng-controller="EventController">
+  <!-- SIDEBAR OVERLAY (click to close) -->
+<div class="sidebar-overlay"
+     ng-show="showSidebar"
+     ng-click="showSidebar = false">
+</div>
+
 <!-- SIDEBAR BACKDROP -->
 <div class="sidebar-backdrop"
      ng-show="showSidebar"
@@ -381,10 +518,18 @@
 </div>
 
 <!-- Splash -->
+<!-- Splash -->
 <div id="splash" ng-show="showSplash">
-  <img src="finderfun.png">
-  <h2>Fun Finder</h2>
+  <video autoplay muted loop id="splashVideo">
+    <source src="your-video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="splash-content">
+    <img src="finderfun.png" alt="Fun Finder Logo">
+    <h2>Fun Finder</h2>
+  </div>
 </div>
+
 
 <!-- RIGHT TOGGLE SIDEBAR -->
 <div class="sidebar right-sidebar bms-sidebar" ng-show="showSidebar">
